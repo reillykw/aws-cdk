@@ -650,7 +650,21 @@ export = {
 
     // THEN
     test.deepEqual(stack1.templateFile, 'MyStack1.template.json');
-    test.deepEqual(stack2.templateFile, 'MyRealStack2.template.json');
+    test.deepEqual(stack2.templateFile, 'MyStack2.template.json');
+    test.done();
+  },
+
+  'allow using the same stack name for two stacks (i.e. in different regions)'(test: Test) {
+    // GIVEN
+    const app = new App();
+
+    // WHEN
+    const stack1 = new Stack(app, 'MyStack1', { stackName: 'thestack' });
+    const stack2 = new Stack(app, 'MyStack2', { stackName: 'thestack' });
+
+    // THEN
+    test.deepEqual(stack1.templateFile, 'MyStack1.template.json');
+    test.deepEqual(stack2.templateFile, 'MyStack2.template.json');
     test.done();
   },
 

@@ -62,7 +62,7 @@ export = {
     const session = app.synth();
 
     // THEN
-    test.ok(list(session.directory).includes('one-stack.template.json'));
+    test.ok(list(session.directory).includes('onestack.template.json'));
     test.done();
   },
 
@@ -90,7 +90,7 @@ export = {
     const session = app.synth();
 
     // THEN
-    test.ok(list(session.directory).includes('one-stack.template.json'));
+    test.ok(list(session.directory).includes('onestack.template.json'));
     test.ok(list(session.directory).includes('foo.json'));
 
     test.deepEqual(readJson(session.directory, 'foo.json'), { bar: 123 });
@@ -109,7 +109,7 @@ export = {
         'one-stack': {
           type: 'aws:cloudformation:stack',
           environment: 'aws://unknown-account/unknown-region',
-          properties: { templateFile: 'one-stack.template.json' },
+          properties: { templateFile: 'onestack.template.json' },
         }
       },
     });

@@ -234,7 +234,7 @@ export class Stack extends Construct implements ITaggable {
       throw new Error(`Stack name must match the regular expression: ${VALID_STACK_NAME_REGEX.toString()}, got '${name}'`);
     }
 
-    this.templateFile = `${this.stackName}.template.json`;
+    this.templateFile = `${this.node.uniqueId}.template.json`;
     this.templateUrl = Lazy.stringValue({ produce: () => this._templateUrl || '<unresolved>' });
   }
 
