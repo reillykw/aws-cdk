@@ -136,6 +136,15 @@ export interface ClusterProps {
   readonly securityGroup?: ec2.ISecurityGroup;
 
   /**
+   * Tags to apply to the aws-eks cluster resource
+   * Note: Tags can only currenltly be applied if kubectlEnabled is enabled.
+   * Cloudformation EKS::Construct does not currently support tags for EKS
+   * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html
+   * @default - by default tags will not be applied if there are none supplied
+   */
+  readonly tags?: { [key: string]: string };
+
+  /**
    * The Kubernetes version to run in the cluster
    *
    * @default - If not supplied, will use Amazon default version
@@ -374,7 +383,10 @@ export class Cluster extends Resource implements ICluster {
     let resource;
     this.kubectlEnabled = props.kubectlEnabled === undefined ? true : props.kubectlEnabled;
     if (this.kubectlEnabled) {
-      resource = new ClusterResource(this, 'Resource', clusterProps);
+      resource = new ClusterResource(this, 'Resource', {
+        ...clusterProps,
+        tags: props.tags
+      });
       this._defaultMastersRole = resource.creationRole;
     } else {
       resource = new CfnCluster(this, 'Resource', clusterProps);

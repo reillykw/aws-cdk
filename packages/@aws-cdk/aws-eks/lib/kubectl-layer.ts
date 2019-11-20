@@ -3,7 +3,7 @@ import { CfnResource, Construct, Stack, Token } from '@aws-cdk/core';
 import crypto = require('crypto');
 
 const KUBECTL_APP_ARN = 'arn:aws:serverlessrepo:us-east-1:903779448426:applications/lambda-layer-kubectl';
-const KUBECTL_APP_VERSION = '1.13.7';
+const KUBECTL_APP_VERSION = '1.14.6';
 
 export interface KubectlLayerProps {
   /**

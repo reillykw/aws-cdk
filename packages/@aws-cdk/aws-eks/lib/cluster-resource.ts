@@ -2,10 +2,19 @@ import cfn = require('@aws-cdk/aws-cloudformation');
 import { PolicyStatement } from '@aws-cdk/aws-iam';
 import iam = require('@aws-cdk/aws-iam');
 import lambda = require('@aws-cdk/aws-lambda');
+import { Runtime, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import { Construct, Duration, Token } from '@aws-cdk/core';
 import path = require('path');
 import { CfnClusterProps } from './eks.generated';
 import { KubectlLayer } from './kubectl-layer';
+
+export interface ClusterResourceProps extends CfnClusterProps {
+  /**
+   * Tags to apply to the stack resource
+   */
+  readonly tags?: { [key: string]: string };
+
+}
 
 /**
  * A low-level CFN resource Amazon EKS cluster implemented through a custom
@@ -35,14 +44,14 @@ export class ClusterResource extends Construct {
    */
   public readonly creationRole: iam.IRole;
 
-  constructor(scope: Construct, id: string, props: CfnClusterProps) {
+  constructor(scope: Construct, id: string, props: ClusterResourceProps) {
     super(scope, id);
 
     // each cluster resource will have it's own lambda handler since permissions
     // are scoped to this cluster and related resources like it's role
     const handler = new lambda.Function(this, 'ResourceHandler', {
       code: lambda.Code.fromAsset(path.join(__dirname, 'cluster-resource')),
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: new Runtime('python3.8',      RuntimeFamily.PYTHON, { supportsInlineCode: true }),
       handler: 'index.handler',
       timeout: Duration.minutes(15),
       memorySize: 512,
